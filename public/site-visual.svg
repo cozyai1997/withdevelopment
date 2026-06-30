@@ -1,0 +1,21 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">함께하는개발 현장 작업 추상 이미지</title>
+  <desc id="desc">개인정보가 없는 철거 현장 분위기의 비식별 그래픽</desc>
+  <rect width="1200" height="760" fill="#101820"/>
+  <rect x="0" y="526" width="1200" height="234" fill="#F7F4EE"/>
+  <rect x="110" y="134" width="380" height="392" fill="#F7F4EE" opacity="0.18"/>
+  <rect x="540" y="96" width="224" height="430" fill="#F7F4EE" opacity="0.14"/>
+  <rect x="812" y="184" width="236" height="342" fill="#F7F4EE" opacity="0.12"/>
+  <rect x="154" y="184" width="84" height="72" fill="#D6A21A"/>
+  <rect x="278" y="184" width="84" height="72" fill="#F7F4EE"/>
+  <rect x="610" y="158" width="80" height="104" fill="#D6A21A"/>
+  <rect x="864" y="244" width="112" height="78" fill="#F7F4EE"/>
+  <rect x="158" y="603" width="882" height="18" fill="#101820"/>
+  <polygon points="282,612 430,450 458,476 338,612" fill="#D6A21A"/>
+  <polygon points="430,450 586,612 530,612 402,476" fill="#D6A21A"/>
+  <polygon points="690,612 816,390 846,418 738,612" fill="#101820"/>
+  <polygon points="816,390 954,612 896,612 786,418" fill="#101820"/>
+  <rect x="174" y="656" width="168" height="28" fill="#101820"/>
+  <rect x="396" y="656" width="304" height="28" fill="#D6A21A"/>
+  <rect x="754" y="656" width="268" height="28" fill="#101820"/>
+</svg>

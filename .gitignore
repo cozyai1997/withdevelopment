@@ -1,0 +1,15 @@
+.next/
+node_modules/
+out/
+build/
+coverage/
+outputs/
+tsconfig.tsbuildinfo
+.env
+.env*.local
+!.env.example
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
