@@ -1,8 +1,10 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSiteUrl } from "@/lib/site";
+import { getTempAdminCookieValue, isTempAdminCredentials, TEMP_ADMIN_COOKIE } from "@/lib/temp-admin";
 import { readString } from "@/lib/validation";
 
 function loginRedirect(message: string): never {
@@ -20,16 +22,28 @@ async function requireSupabaseForLogin(): Promise<NonNullable<Awaited<ReturnType
 }
 
 export async function signIn(formData: FormData) {
-  const supabase = await requireSupabaseForLogin();
-  const email = readString(formData, "email");
+  const loginId = readString(formData, "email");
   const password = readString(formData, "password");
 
-  if (!email || !password) {
-    loginRedirect("이메일과 비밀번호를 입력해 주세요.");
+  if (!loginId || !password) {
+    loginRedirect("아이디 또는 이메일과 비밀번호를 입력해 주세요.");
   }
 
+  if (isTempAdminCredentials(loginId, password)) {
+    const cookieStore = await cookies();
+    cookieStore.set(TEMP_ADMIN_COOKIE, getTempAdminCookieValue(), {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+      maxAge: 60 * 60 * 8,
+    });
+    redirect("/admin");
+  }
+
+  const supabase = await requireSupabaseForLogin();
   const { error } = await supabase.auth.signInWithPassword({
-    email,
+    email: loginId,
     password,
   });
 
@@ -65,6 +79,9 @@ export async function signUp(formData: FormData) {
 }
 
 export async function signOut() {
+  const cookieStore = await cookies();
+  cookieStore.delete(TEMP_ADMIN_COOKIE);
+
   const supabase = await createSupabaseServerClient();
 
   if (supabase) {

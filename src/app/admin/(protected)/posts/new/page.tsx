@@ -7,8 +7,8 @@ export default function NewPostPage() {
   return (
     <section className="admin-panel">
       <p className="eyebrow">CREATE</p>
-      <h1>새 게시글 작성</h1>
-      <PostForm action={createPost} submitLabel="게시글 저장" />
+      <h1>글쓰기</h1>
+      <PostForm action={createPost} submitLabel="등록하기" />
     </section>
   );
 }

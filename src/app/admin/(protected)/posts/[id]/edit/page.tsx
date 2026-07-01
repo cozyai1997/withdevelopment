@@ -23,7 +23,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
     <section className="admin-panel">
       <p className="eyebrow">EDIT</p>
       <h1>게시글 수정</h1>
-      <PostForm post={post} action={action} submitLabel="수정 저장" />
+      <PostForm post={post} action={action} submitLabel="수정하기" />
     </section>
   );
 }

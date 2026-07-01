@@ -4,6 +4,7 @@ import { Building2, ClipboardCheck, Hammer, Landmark } from "lucide-react";
 import { CtaRow } from "@/components/cta-row";
 import { HomeBoardPreview, HomeCaseGallery, WorkflowSteps } from "@/components/home-sections";
 import { QuoteRequestModal } from "@/components/quote-request-modal";
+import { RecentCaseSlider } from "@/components/recent-case-slider";
 import { VideoPopup } from "@/components/video-popup";
 import { getPublicPopupVideo } from "@/lib/popup-video";
 import { boards, services, siteName } from "@/lib/site";
@@ -72,7 +73,7 @@ export default async function Home() {
               전체 시공실적 보기
             </Link>
           </div>
-          <HomeCaseGallery posts={casePosts} variant="rail" />
+          <RecentCaseSlider posts={casePosts} />
         </div>
       </section>
 

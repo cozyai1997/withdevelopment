@@ -3,6 +3,7 @@ import { deletePost, setPostStatus } from "@/app/admin/posts/actions";
 import { StatusMessage } from "@/components/status-message";
 import { boards } from "@/lib/site";
 import { listAdminPosts } from "@/lib/posts";
+import { isLocalMockMode } from "@/lib/local-mock-mode";
 
 type AdminPageProps = {
   searchParams: Promise<{ message?: string | string[] }>;
@@ -20,6 +21,7 @@ function formatDate(value: string) {
 export default async function AdminPage({ searchParams }: AdminPageProps) {
   const params = await searchParams;
   const posts = await listAdminPosts();
+  const localMockMode = isLocalMockMode();
 
   return (
     <section className="admin-grid">
@@ -27,6 +29,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
         <p className="eyebrow">POSTS</p>
         <h1>게시글 관리</h1>
         <StatusMessage message={params.message} />
+        {localMockMode ? <p className="message">Local Mock Mode 사용 중입니다. 데이터는 .local-test-data에만 저장됩니다.</p> : null}
         <div className="actions">
           <Link className="button" href="/admin/posts/new">
             새 글 작성

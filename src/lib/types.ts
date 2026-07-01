@@ -4,6 +4,10 @@ export type PostStatus = "draft" | "published";
 
 export type ProfileRole = "pending" | "admin";
 
+export const caseCategories = ["완전 철거", "인테리어 철거", "석면 해체", "구조물 해체", "비계공사", "토공사", "기타"] as const;
+
+export type CaseCategory = (typeof caseCategories)[number];
+
 export type DemolitionType =
   | "complete"
   | "interior"
@@ -31,12 +35,32 @@ export type Post = {
   slug: string;
   excerpt: string | null;
   content: string;
+  case_category: CaseCategory | null;
+  case_location: string | null;
+  case_area: string | null;
+  case_cost: string | null;
+  video_url: string | null;
   status: PostStatus;
   published_at: string | null;
   created_by: string | null;
   updated_by: string | null;
   created_at: string;
   updated_at: string;
+};
+
+export type PostImage = {
+  id: string;
+  post_id: string;
+  bucket: "case-images";
+  storage_path: string;
+  alt_text: string | null;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PostWithImages = Post & {
+  images: PostImage[];
 };
 
 export type QuoteRequest = {
@@ -103,6 +127,11 @@ export type Database = {
           slug: string;
           excerpt?: string | null;
           content: string;
+          case_category?: CaseCategory | null;
+          case_location?: string | null;
+          case_area?: string | null;
+          case_cost?: string | null;
+          video_url?: string | null;
           status?: PostStatus;
           published_at?: string | null;
           created_by?: string | null;
@@ -116,6 +145,11 @@ export type Database = {
           slug?: string;
           excerpt?: string | null;
           content?: string;
+          case_category?: CaseCategory | null;
+          case_location?: string | null;
+          case_area?: string | null;
+          case_cost?: string | null;
+          video_url?: string | null;
           status?: PostStatus;
           published_at?: string | null;
           updated_by?: string | null;
@@ -134,6 +168,36 @@ export type Database = {
             columns: ["updated_by"];
             isOneToOne: false;
             referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      post_images: {
+        Row: PostImage;
+        Insert: {
+          id?: string;
+          post_id: string;
+          bucket?: "case-images";
+          storage_path: string;
+          alt_text?: string | null;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          post_id?: string;
+          bucket?: "case-images";
+          storage_path?: string;
+          alt_text?: string | null;
+          sort_order?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "post_images_post_id_fkey";
+            columns: ["post_id"];
+            isOneToOne: false;
+            referencedRelation: "posts";
             referencedColumns: ["id"];
           },
         ];

@@ -100,7 +100,17 @@ async function readFunctionError(error: unknown) {
   return "견적 요청 전송 중 오류가 발생했습니다.";
 }
 
-export function QuoteRequestModal() {
+type QuoteRequestModalProps = {
+  triggerClassName?: string;
+  triggerLabel?: string;
+  triggerVariant?: "default" | "text";
+};
+
+export function QuoteRequestModal({
+  triggerClassName = "button quote-open-button",
+  triggerLabel = "무료 비교 견적 받기",
+  triggerVariant = "default",
+}: QuoteRequestModalProps) {
   const headingId = useId();
   const fileInputId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -263,12 +273,14 @@ export function QuoteRequestModal() {
 
   return (
     <>
-      <button className="button quote-open-button" type="button" onClick={openModal}>
-        <span className="quote-open-button__icon-block" aria-hidden="true">
-          <FileText className="quote-open-button__icon" />
-        </span>
-        <span className="quote-open-button__label">무료 비교 견적 받기</span>
-        <ArrowRight className="quote-open-button__arrow" aria-hidden="true" />
+      <button className={triggerClassName} type="button" onClick={openModal}>
+        {triggerVariant === "default" ? (
+          <span className="quote-open-button__icon-block" aria-hidden="true">
+            <FileText className="quote-open-button__icon" />
+          </span>
+        ) : null}
+        <span className={triggerVariant === "default" ? "quote-open-button__label" : undefined}>{triggerLabel}</span>
+        {triggerVariant === "default" ? <ArrowRight className="quote-open-button__arrow" aria-hidden="true" /> : null}
       </button>
 
       {isOpen ? (

@@ -1,8 +1,17 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { getTempAdminProfile, isTempAdminSession, TEMP_ADMIN_COOKIE } from "@/lib/temp-admin";
 import type { Profile } from "@/lib/types";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function getCurrentProfile(): Promise<Profile | null> {
+  const cookieStore = await cookies();
+  const tempAdminCookie = cookieStore.get(TEMP_ADMIN_COOKIE)?.value;
+
+  if (isTempAdminSession(tempAdminCookie)) {
+    return getTempAdminProfile();
+  }
+
   const supabase = await createSupabaseServerClient();
 
   if (!supabase) {

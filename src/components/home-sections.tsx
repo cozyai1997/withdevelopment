@@ -1,7 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { CalendarCheck, CheckSquare, ChevronRight, Handshake, MessageCircle, Search, ShieldCheck, Truck } from "lucide-react";
-import type { Board, Post } from "@/lib/types";
+import { getCaseImagePublicUrl } from "@/lib/post-images";
 import { boards } from "@/lib/site";
+import type { Board, PostWithImages } from "@/lib/types";
 
 const boardLabels: Record<Board, string> = {
   cases: "시공실적",
@@ -25,9 +27,15 @@ function formatDate(value: string | null) {
   }).format(new Date(value));
 }
 
-function CaseCard({ post, featured = false }: { post: Post; featured?: boolean }) {
+function CaseCard({ post, featured = false }: { post: PostWithImages; featured?: boolean }) {
+  const image = post.images[0];
+  const imageUrl = getCaseImagePublicUrl(image?.storage_path);
+
   return (
     <article className={featured ? "case-card case-card--featured" : "case-card"}>
+      <Link className="case-card__image" href={`${boards.cases.href}/${post.slug}`}>
+        {imageUrl ? <img alt={image?.alt_text ?? post.title} src={imageUrl} /> : <div className="case-placeholder">사진없음</div>}
+      </Link>
       <div className="case-card__meta">
         <span className="badge">{boardLabels.cases}</span>
         <span>{formatDate(post.published_at ?? post.created_at)}</span>
@@ -56,7 +64,7 @@ function EmptyCaseState({ compact = false }: { compact?: boolean }) {
   );
 }
 
-export function HomeCaseGallery({ posts, variant = "featured" }: { posts: Post[]; variant?: "rail" | "featured" }) {
+export function HomeCaseGallery({ posts, variant = "featured" }: { posts: PostWithImages[]; variant?: "rail" | "featured" }) {
   if (posts.length === 0) {
     return <EmptyCaseState compact={variant === "rail"} />;
   }
@@ -85,7 +93,7 @@ export function HomeCaseGallery({ posts, variant = "featured" }: { posts: Post[]
   );
 }
 
-export function HomeBoardPreview({ board, posts }: { board: Board; posts: Post[] }) {
+export function HomeBoardPreview({ board, posts }: { board: Board; posts: PostWithImages[] }) {
   const boardInfo = boards[board];
   const label = boardLabels[board];
 

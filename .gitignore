@@ -11,5 +11,7 @@ tsconfig.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.next-dev.log
+.local-test-data/
 .DS_Store
 Thumbs.db
