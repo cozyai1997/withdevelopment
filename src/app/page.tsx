@@ -32,7 +32,7 @@ export default async function Home() {
         <div className="hero__inner">
           <div className="hero__copy">
             <div className="hero__brand-lockup" aria-label={siteName}>
-              <Image className="hero__brand-mark" src="/brand/hamkke-logo-mark.png" alt="" width={335} height={266} priority />
+              <Image className="hero__brand-mark" src="/brand/hamkke-logo-mark.png" alt="" width={335} height={266} priority unoptimized />
               <span>WITH DEVELOPMENT</span>
             </div>
             <p className="eyebrow">DEMOLITION SERVICE</p>

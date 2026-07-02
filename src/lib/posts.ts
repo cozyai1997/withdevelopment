@@ -16,6 +16,22 @@ function withImages(post: PostRowWithImages): PostWithImages {
   };
 }
 
+function getSlugCandidates(slug: string) {
+  const candidates = [slug];
+
+  try {
+    const decodedSlug = decodeURIComponent(slug);
+
+    if (decodedSlug !== slug) {
+      candidates.push(decodedSlug);
+    }
+  } catch {
+    // Keep the original slug when the URL segment is not URI-encoded.
+  }
+
+  return candidates;
+}
+
 export async function listPublishedPosts(board?: Board, limit?: number): Promise<PostWithImages[]> {
   const supabase = await createSupabaseServerClient();
 
@@ -51,24 +67,56 @@ export async function listPublishedPosts(board?: Board, limit?: number): Promise
 
 export async function getPublishedPost(board: Board, slug: string): Promise<PostWithImages | null> {
   const supabase = await createSupabaseServerClient();
+  const slugCandidates = getSlugCandidates(slug);
 
   if (!supabase) {
-    return isLocalMockMode() ? localMockStore.getPublishedPost(board, slug) : null;
+    if (!isLocalMockMode()) {
+      return null;
+    }
+
+    for (const candidate of slugCandidates) {
+      const post = await localMockStore.getPublishedPost(board, candidate);
+
+      if (post) {
+        return post;
+      }
+    }
+
+    return null;
   }
 
-  const { data, error } = await supabase
-    .from("posts")
-    .select("*, post_images(*)")
-    .eq("board", board)
-    .eq("slug", slug)
-    .eq("status", "published")
-    .maybeSingle();
+  let lastError = false;
 
-  if (error) {
-    return isLocalMockMode() ? localMockStore.getPublishedPost(board, slug) : null;
+  for (const candidate of slugCandidates) {
+    const { data, error } = await supabase
+      .from("posts")
+      .select("*, post_images(*)")
+      .eq("board", board)
+      .eq("slug", candidate)
+      .eq("status", "published")
+      .maybeSingle();
+
+    if (error) {
+      lastError = true;
+      continue;
+    }
+
+    if (data) {
+      return withImages(data as PostRowWithImages);
+    }
   }
 
-  return data ? withImages(data as PostRowWithImages) : null;
+  if (lastError && isLocalMockMode()) {
+    for (const candidate of slugCandidates) {
+      const post = await localMockStore.getPublishedPost(board, candidate);
+
+      if (post) {
+        return post;
+      }
+    }
+  }
+
+  return null;
 }
 
 export async function listAdminPosts(): Promise<PostWithImages[]> {

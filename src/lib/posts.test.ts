@@ -65,6 +65,15 @@ describe("post queries", () => {
     expect(mocks.localMockStore.getPublishedPost).toHaveBeenCalledWith("cases", "published-case");
   });
 
+  it("reads local mock detail posts when the route slug is URI encoded", async () => {
+    const publishedPost = post({ slug: "korean-slug" });
+    mocks.localMockStore.getPublishedPost.mockResolvedValueOnce(null).mockResolvedValueOnce(publishedPost);
+
+    await expect(getPublishedPost("cases", "%ED%95%9C%EA%B8%80")).resolves.toEqual(publishedPost);
+    expect(mocks.localMockStore.getPublishedPost).toHaveBeenNthCalledWith(1, "cases", "%ED%95%9C%EA%B8%80");
+    expect(mocks.localMockStore.getPublishedPost).toHaveBeenNthCalledWith(2, "cases", "한글");
+  });
+
   it("keeps unpublished local mock posts hidden from public detail pages", async () => {
     mocks.localMockStore.getPublishedPost.mockResolvedValue(null);
 

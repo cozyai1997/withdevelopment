@@ -339,7 +339,7 @@ export function SiteIntroLoader() {
               <circle className="site-intro__ring-track" cx="60" cy="60" r="48" pathLength="100" />
               <circle className="site-intro__ring-progress" cx="60" cy="60" r="48" pathLength="100" />
             </svg>
-            <Image className="site-intro__logo-mark" src="/brand/hamkke-logo-mark.png" alt="" width={118} height={94} priority />
+            <Image className="site-intro__logo-mark" src="/brand/hamkke-logo-mark.png" alt="" width={118} height={94} priority unoptimized />
           </div>
           <p className="site-intro__wordmark">WITH DEVELOPMENT</p>
         </div>

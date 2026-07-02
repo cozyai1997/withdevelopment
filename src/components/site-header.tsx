@@ -8,7 +8,7 @@ export function SiteHeader() {
       <div className="site-header__inner">
         <Link className="brand" href="/" aria-label={`${siteName} 홈`}>
           <span className="brand__logo-wrap" aria-hidden="true">
-            <Image className="brand__logo" src="/brand/hamkke-logo-mark.png" alt="" width={335} height={266} priority />
+            <Image className="brand__logo" src="/brand/hamkke-logo-mark.png" alt="" width={335} height={266} priority unoptimized />
           </span>
           <span className="brand__name">{siteName}</span>
         </Link>
