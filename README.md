@@ -25,6 +25,18 @@ npm run dev
 - `NEXT_PUBLIC_CONTACT_SMS`
 - `NEXT_PUBLIC_KAKAO_CHANNEL_URL`
 
+홈 하단 위치 안내:
+
+- `NEXT_PUBLIC_COMPANY_ADDRESS`
+- `NEXT_PUBLIC_COMPANY_LAT`
+- `NEXT_PUBLIC_COMPANY_LNG`
+- `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID`
+- `NEXT_PUBLIC_NAVER_MAP_URL`
+
+`NEXT_PUBLIC_NAVER_MAP_CLIENT_ID`에는 `Application Services > Maps`에서 발급한 신규 Client ID를 입력합니다. 구형 `AI·NAVER API` Application의 Client ID나 Client Secret은 사용할 수 없습니다. Application에서 `Web Dynamic Map`을 선택하고 Web 서비스 URL은 포트와 경로를 제외한 `http://localhost`로 등록합니다. 운영 도메인도 같은 방식으로 호스트만 등록합니다.
+
+네이버지도 Client ID와 좌표가 없거나 인증에 실패하면 홈 하단에는 지도 연결 안내와 네이버지도 바로가기가 표시됩니다.
+
 첫 관리자 계정은 Supabase에서 가입 후 SQL로 `profiles.role = 'admin'`으로 승격합니다.
 
 ## 시공 실적 작성 규칙

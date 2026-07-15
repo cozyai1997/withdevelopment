@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { CalendarCheck, CheckSquare, ChevronRight, Handshake, MessageCircle, Search, ShieldCheck, Truck } from "lucide-react";
+import { CalendarCheck, CheckSquare, ChevronRight, Handshake, Search, ShieldCheck, Truck } from "lucide-react";
 import { getCaseImagePublicUrl } from "@/lib/post-images";
 import { boards } from "@/lib/site";
 import type { Board, PostWithImages } from "@/lib/types";
@@ -156,28 +156,16 @@ export function WorkflowSteps() {
 
   return (
     <div className="workflow-showcase">
-      <div className="workflow-showcase__tag" aria-hidden="true">
-        <strong>문의의 시작</strong>
-        <span>빠르고 정확한 대응</span>
-      </div>
-      <div className="workflow-showcase__hub">
-        <MessageCircle className="workflow-showcase__hub-icon" aria-hidden="true" />
-        <strong>문의 접수</strong>
-        <p>
-          문의가 접수되면
-          <br />
-          전담 담당자가 배정됩니다.
-        </p>
-      </div>
       <ol className="workflow-steps">
         {steps.map(({ title, description, Icon }, index) => (
           <li key={title}>
-            <span className="workflow-steps__number">{String(index + 1).padStart(2, "0")}</span>
             <div className="workflow-steps__icon-wrap">
               <Icon className="workflow-steps__icon" aria-hidden="true" />
             </div>
-            <strong>{title}</strong>
-            <p>{description}</p>
+            <div className="workflow-steps__content">
+              <strong>{title}</strong>
+              <p>{description}</p>
+            </div>
             {index < steps.length - 1 ? (
               <span className="workflow-steps__arrow" aria-hidden="true">
                 <ChevronRight />

@@ -56,6 +56,108 @@ export const services = [
   },
 ];
 
+export const servicePageContent = {
+  heroImage: "/services/hero-structure.png",
+  serviceImages: {
+    structure: "/services/structure-demolition.png",
+    remodeling: "/services/remodeling-demolition.png",
+    permit: "/services/permit-support.png",
+    redevelopment: "/services/redevelopment-demolition.png",
+  },
+  cards: [
+    {
+      slug: "structure-demolition",
+      number: "01",
+      icon: "building",
+      imageSrc: "/services/structure-demolition.png",
+      title: "구조물 철거",
+      lead: "건축물과 구조물의 현장 조건을 확인한 뒤 안전한 철거 흐름을 설계합니다.",
+      tags: ["완파", "부분 철거", "구조물 철거"],
+    },
+    {
+      slug: "remodeling-demolition",
+      number: "02",
+      icon: "house",
+      imageSrc: "/services/remodeling-demolition.png",
+      title: "리모델링 철거",
+      lead: "상가, 주거, 내부 공간의 리모델링 전 철거 범위를 구분해 진행합니다.",
+      tags: ["내부 철거", "원상복구", "마감재 철거"],
+    },
+    {
+      slug: "permit-support",
+      number: "03",
+      icon: "document",
+      imageSrc: "/services/permit-support.png",
+      title: "철거 대관업무",
+      lead: "철거 전 필요한 신고, 허가, 행정 절차를 현장 조건에 맞춰 지원합니다.",
+      tags: ["해체 신고", "해체 허가", "멸실 관련 업무"],
+    },
+    {
+      slug: "redevelopment-demolition",
+      number: "04",
+      icon: "landmark",
+      imageSrc: "/services/redevelopment-demolition.png",
+      title: "재개발·재건축구역 철거",
+      lead: "정비구역 특성과 이해관계자 협의를 고려해 단계별 철거 관리를 수행합니다.",
+      tags: ["정비구역 철거", "순차 철거", "협의 및 관리"],
+    },
+  ],
+  processSteps: [
+    {
+      number: "01",
+      icon: "search",
+      title: "현장 확인",
+      description: "현장 조사 및 주변 환경, 구조, 작업 범위를 확인합니다.",
+    },
+    {
+      number: "02",
+      icon: "clipboard",
+      title: "철거 범위 산정",
+      description: "안전 계획과 철거 범위를 구분하여 산정합니다.",
+    },
+    {
+      number: "03",
+      icon: "file",
+      title: "신고·허가 검토",
+      description: "필요한 신고와 허가 절차를 검토하고 진행합니다.",
+    },
+    {
+      number: "04",
+      icon: "worker",
+      title: "시공 및 폐기물 처리",
+      description: "안전하게 철거를 진행하고 폐기물을 적법하게 처리합니다.",
+    },
+  ],
+} as const;
+
+function parsePublicNumber(value: string | undefined) {
+  if (!value) {
+    return null;
+  }
+
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+export function getLocationContent() {
+  const address = process.env.NEXT_PUBLIC_COMPANY_ADDRESS || "공식 주소 준비 중";
+  const lat = parsePublicNumber(process.env.NEXT_PUBLIC_COMPANY_LAT);
+  const lng = parsePublicNumber(process.env.NEXT_PUBLIC_COMPANY_LNG);
+  const naverMapClientId = process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID || "";
+  const naverMapUrl = process.env.NEXT_PUBLIC_NAVER_MAP_URL || "";
+
+  return {
+    title: "함께하는개발 오시는 길",
+    eyebrow: "LOCATION",
+    description: "방문 전 공식 문의 채널로 일정을 확인해 주세요.",
+    address,
+    lat,
+    lng,
+    naverMapClientId,
+    naverMapUrl,
+  };
+}
+
 export function getContactLinks() {
   return {
     tel: process.env.NEXT_PUBLIC_CONTACT_TEL ?? "",

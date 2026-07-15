@@ -12,6 +12,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .next-dev.log
+.next-dev.out.log
+.next-dev.err.log
+.codex-docx-work/
+.vs/
 .local-test-data/
 .DS_Store
 Thumbs.db

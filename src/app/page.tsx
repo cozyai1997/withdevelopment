@@ -1,13 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { Building2, ClipboardCheck, Hammer, Landmark } from "lucide-react";
 import { CtaRow } from "@/components/cta-row";
-import { HomeBoardPreview, HomeCaseGallery, WorkflowSteps } from "@/components/home-sections";
+import { HomeBoardPreview, WorkflowSteps } from "@/components/home-sections";
+import { NaverLocationMap } from "@/components/naver-location-map";
 import { QuoteRequestModal } from "@/components/quote-request-modal";
 import { RecentCaseSlider } from "@/components/recent-case-slider";
 import { VideoPopup } from "@/components/video-popup";
 import { getPublicPopupVideo } from "@/lib/popup-video";
-import { boards, services, siteName } from "@/lib/site";
+import { boards, getLocationContent, servicePageContent, services, siteName } from "@/lib/site";
 import { listPublishedPosts } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
@@ -15,6 +17,7 @@ export const dynamic = "force-dynamic";
 const servicePremiumIcons = [Building2, Hammer, ClipboardCheck, Landmark];
 
 export default async function Home() {
+  const location = getLocationContent();
   const [casePosts, noticePosts, resourcePosts, popupVideo] = await Promise.all([
     listPublishedPosts("cases", 5),
     listPublishedPosts("notice", 3),
@@ -82,7 +85,7 @@ export default async function Home() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">ABOUT</p>
-              <h2>현장 조건을 먼저 보는 철거 파트너</h2>
+              <h2>철거 현장을 읽고 정리하는 방식</h2>
             </div>
             <Link className="text-link" href="/about">
               회사소개 보기
@@ -90,12 +93,12 @@ export default async function Home() {
           </div>
           <div className="grid grid--two">
             <article className="plain-panel">
-              <h3>업무 원칙</h3>
-              <p>현장 조사, 작업 범위, 안전 동선, 공개 가능 정보를 분리해 확인합니다.</p>
+              <h3>회사 기준</h3>
+              <p>견적보다 먼저 현장의 구조와 협의 조건을 읽고, 필요한 확인 항목을 정리합니다.</p>
             </article>
             <article className="plain-panel">
-              <h3>공개 기준</h3>
-              <p>시공 실적은 지역 단위와 작업 범위 중심으로 정리하고, 식별 정보는 공개하지 않습니다.</p>
+              <h3>운영 방식</h3>
+              <p>상담, 서비스, 실적 기록이 각각 흩어지지 않도록 한 흐름으로 이어 둡니다.</p>
             </article>
           </div>
         </div>
@@ -114,9 +117,13 @@ export default async function Home() {
         <div className="service-premium__grid">
           {services.map((service, index) => {
             const Icon = servicePremiumIcons[index] ?? Building2;
+            const imageSrc = servicePageContent.cards.find((item) => item.slug === service.slug)?.imageSrc ?? servicePageContent.heroImage;
+            const panelStyle = {
+              "--service-premium-image": `url("${imageSrc}")`,
+            } as CSSProperties;
 
             return (
-              <article className="service-premium__panel" key={service.slug}>
+              <article className="service-premium__panel" key={service.slug} style={panelStyle}>
                 <div className="service-premium__content">
                   <span className="service-premium__icon-box" aria-hidden="true">
                     <Icon className="service-premium__icon" />
@@ -129,28 +136,10 @@ export default async function Home() {
                       <li key={point}>{point}</li>
                     ))}
                   </ul>
-                  <Link className="service-premium__link" href={`/services/${service.slug}`}>
-                    상세 보기
-                  </Link>
                 </div>
               </article>
             );
           })}
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="section__inner">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">CASE GALLERY</p>
-              <h2>시공 실적 갤러리</h2>
-            </div>
-            <Link className="text-link" href={boards.cases.href}>
-              전체 목록 보기
-            </Link>
-          </div>
-          <HomeCaseGallery posts={casePosts} />
         </div>
       </section>
 
@@ -159,16 +148,30 @@ export default async function Home() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">WORKFLOW</p>
-              <h2>문의부터 정리까지</h2>
+              <h2>
+                문의부터 정리까지
+                <span>체계적인 철거 프로세스</span>
+              </h2>
               <p className="workflow-section__lead">
-                문의 접수부터 현장 정리 및 후속 안내까지,
+                문의 접수부터 현장 정리 및 사후 안내까지,
                 <br />
-                체계적인 절차로 안전하고 신속하게 진행됩니다.
+                안전과 신속함을 최우선으로 진행합니다.
               </p>
+              <ul className="workflow-section__proof" aria-label="철거 프로세스 핵심 가치">
+                <li>
+                  <strong>안전 최우선</strong>
+                  <span>모든 과정 안전관리</span>
+                </li>
+                <li>
+                  <strong>전문 인력 운영</strong>
+                  <span>정밀 인력 투입</span>
+                </li>
+                <li>
+                  <strong>신속·정확 대응</strong>
+                  <span>체계적 일정 관리</span>
+                </li>
+              </ul>
             </div>
-            <Link className="text-link" href="/contact">
-              문의 준비하기
-            </Link>
           </div>
           <WorkflowSteps />
         </div>
@@ -186,6 +189,44 @@ export default async function Home() {
             <HomeBoardPreview board="notice" posts={noticePosts} />
             <HomeBoardPreview board="resources" posts={resourcePosts} />
           </div>
+        </div>
+      </section>
+
+      <section className="section section--ink location-section" aria-labelledby="location-heading">
+        <div className="section__inner location-section__inner">
+          <div className="location-section__copy">
+            <p className="eyebrow">{location.eyebrow}</p>
+            <h2 id="location-heading">{location.title}</h2>
+            <p>{location.description}</p>
+            <dl className="location-section__info">
+              <div>
+                <dt>주소</dt>
+                <dd>{location.address}</dd>
+              </div>
+              <div>
+                <dt>방문 안내</dt>
+                <dd>현장 일정으로 부재중일 수 있으니 방문 전 문의를 먼저 남겨주세요.</dd>
+              </div>
+            </dl>
+            <div className="actions">
+              <Link className="button" href="/contact">
+                문의하기
+              </Link>
+              {location.naverMapUrl ? (
+                <Link className="button button--light" href={location.naverMapUrl} target="_blank" rel="noreferrer">
+                  네이버지도 열기
+                </Link>
+              ) : null}
+            </div>
+          </div>
+          <NaverLocationMap
+            address={location.address}
+            clientId={location.naverMapClientId}
+            lat={location.lat}
+            lng={location.lng}
+            mapUrl={location.naverMapUrl}
+            title={location.title}
+          />
         </div>
       </section>
 

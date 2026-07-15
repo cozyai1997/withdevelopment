@@ -1,43 +1,53 @@
 import Link from "next/link";
-import { contactWorkflowContent } from "@/lib/contact-workflow";
+import type { LucideIcon } from "lucide-react";
+import { Mail, MessageCircle, Phone } from "lucide-react";
+import { contactWorkflowContent, type ContactMethodIcon } from "@/lib/contact-workflow";
 import { getContactLinks } from "@/lib/site";
 import styles from "../contact-page.module.css";
 
+const methodIcons: Record<ContactMethodIcon, LucideIcon> = {
+  phone: Phone,
+  kakao: MessageCircle,
+  sms: Mail,
+};
+
 export function ContactActionsSection() {
   const contact = getContactLinks();
-  const content = contactWorkflowContent;
-  const telHref = contact.tel ? `tel:${contact.tel}` : "#contact-actions";
-  const smsHref = contact.sms ? `sms:${contact.sms}` : "#contact-actions";
-  const kakaoHref = contact.kakao || "#contact-actions";
+  const content = contactWorkflowContent.contactMethods;
+  const hrefByIcon: Record<ContactMethodIcon, string> = {
+    phone: contact.tel ? `tel:${contact.tel}` : "#contact-methods",
+    kakao: contact.kakao || "#contact-methods",
+    sms: contact.sms ? `sms:${contact.sms}` : "#contact-methods",
+  };
+  const valueByIcon: Partial<Record<ContactMethodIcon, string>> = {
+    phone: contact.tel || undefined,
+    sms: contact.sms || undefined,
+  };
 
   return (
-    <section className={`section ${styles.actionsSection}`} id="contact-actions">
-      <div className="section__inner grid grid--two">
-        <article className="plain-panel">
-          <p className="eyebrow">{content.contactActions.eyebrow}</p>
-          <h2>{content.contactActions.title}</h2>
-          <p>{content.contactActions.description}</p>
-          <div className="actions">
-            <Link className="button" href={telHref}>
-              {content.contactActions.buttons.tel}
-            </Link>
-            <Link className="button button--ink" href={smsHref}>
-              {content.contactActions.buttons.sms}
-            </Link>
-            <Link className="button button--ink" href={kakaoHref}>
-              {content.contactActions.buttons.kakao}
-            </Link>
-          </div>
-        </article>
-        <article className="plain-panel">
-          <p className="eyebrow">{content.checklist.eyebrow}</p>
-          <h2>{content.checklist.title}</h2>
-          <ul className="list">
-            {content.checklist.items.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </article>
+    <section className={styles.methodSection} id="contact-methods" aria-labelledby="contact-method-title">
+      <div className={styles.methodInner}>
+        <p className="eyebrow">{content.eyebrow}</p>
+        <h2 id="contact-method-title">{content.title}</h2>
+        <p>{content.description}</p>
+        <div className={styles.methodGrid}>
+          {content.items.map((item) => {
+            const Icon = methodIcons[item.icon];
+            const href = hrefByIcon[item.icon];
+            const isExternal = item.icon === "kakao" && href.startsWith("http");
+
+            return (
+              <Link className={styles.methodCard} href={href} key={item.label} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noreferrer" : undefined}>
+                <Icon aria-hidden="true" />
+                <span>
+                  <strong>{item.label}</strong>
+                  <b>{valueByIcon[item.icon] ?? item.value}</b>
+                  <small>{item.description}</small>
+                </span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
