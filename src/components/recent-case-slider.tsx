@@ -282,7 +282,7 @@ export function RecentCaseSlider({ posts }: { posts: PostWithImages[] }) {
       <div className="case-empty case-empty--compact">
         <p className="eyebrow">CASES</p>
         <h3>공개 가능한 시공 실적을 준비 중입니다</h3>
-        <p>관리자에서 시공실적 게시글을 공개하면 최근 5개가 자동으로 표시됩니다.</p>
+
       </div>
     );
   }

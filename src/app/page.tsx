@@ -7,7 +7,7 @@ import { HomeBoardPreview, WorkflowSteps } from "@/components/home-sections";
 import { NaverLocationMap } from "@/components/naver-location-map";
 import { QuoteRequestModal } from "@/components/quote-request-modal";
 import { RecentCaseSlider } from "@/components/recent-case-slider";
-import { VideoPopup } from "@/components/video-popup";
+import { InterviewVideo } from "@/components/interview-video";
 import { getPublicPopupVideo } from "@/lib/popup-video";
 import { boards, getLocationContent, servicePageContent, services, siteName } from "@/lib/site";
 import { listPublishedPosts } from "@/lib/posts";
@@ -27,7 +27,6 @@ export default async function Home() {
 
   return (
     <>
-      <VideoPopup video={popupVideo} />
       <section className="hero">
         <video className="hero__video" autoPlay muted loop playsInline preload="metadata" poster="/site-visual.svg" aria-hidden="true">
           <source src="/0_Demolition_Construction_1920x1080.mp4" type="video/mp4" />
@@ -65,7 +64,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="section section--white section--compact">
+      <section className={`section section--white section--compact${casePosts.length === 0 ? " home-cases--empty" : ""}`}>
         <div className="section__inner">
           <div className="section-heading">
             <div>
@@ -103,6 +102,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <InterviewVideo video={popupVideo} />
 
       <section className="service-premium" aria-labelledby="services-heading">
         <div className="service-premium__header">

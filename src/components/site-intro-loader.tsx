@@ -19,6 +19,8 @@ export function SiteIntroLoader() {
   const [visible, setVisible] = useState(true);
   const introRef = useRef<HTMLDivElement>(null);
   const readyRef = useRef(false);
+  const skipIntroRef = useRef<(() => void) | null>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
   const completeRef = useRef(false);
   const progressRef = useRef(0);
   const targetProgressRef = useRef(0);
@@ -76,6 +78,7 @@ export function SiteIntroLoader() {
       }
 
       completeRef.current = true;
+      timelineRef.current?.kill();
       readyRef.current = false;
       autoRevealRef.current = true;
       revealTweenRef.current?.kill();
@@ -101,6 +104,8 @@ export function SiteIntroLoader() {
         },
       });
     };
+
+    skipIntroRef.current = completeIntro;
 
     const renderRevealProgress = (nextProgress: number) => {
       const intro = introRef.current;
@@ -261,6 +266,7 @@ export function SiteIntroLoader() {
       }
 
       const timeline = gsap.timeline({ defaults: { ease: "power3.out" } });
+      timelineRef.current = timeline;
 
       timeline
         .to(".site-intro__video", { opacity: 0.36, scale: 1, duration: 1.35 }, 0)
@@ -305,6 +311,8 @@ export function SiteIntroLoader() {
       window.removeEventListener("keydown", handleKeyDown);
       revealTweenRef.current?.kill();
       revealTweenRef.current = null;
+      skipIntroRef.current = null;
+      timelineRef.current = null;
       context.revert();
     };
   }, [pathname, router]);
@@ -321,6 +329,9 @@ export function SiteIntroLoader() {
       aria-live="polite"
       aria-label="스크롤하여 홈페이지를 확인합니다"
     >
+      <button className="site-intro__skip" type="button" onClick={() => skipIntroRef.current?.()}>
+        인트로 건너뛰기 →
+      </button>
       <div className="site-intro__curtain" aria-hidden="true">
         <video className="site-intro__video" autoPlay muted loop playsInline preload="auto">
           <source src="/0_Demolition_Construction_1920x1080.mp4" type="video/mp4" />

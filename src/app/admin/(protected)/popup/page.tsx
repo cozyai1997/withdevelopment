@@ -15,9 +15,9 @@ export default async function PopupAdminPage({ searchParams }: PopupAdminPagePro
   return (
     <section className="admin-grid">
       <div className="admin-panel">
-        <p className="eyebrow">VIDEO POPUP</p>
-        <h1>홈 영상 팝업 관리</h1>
-        <p>홈페이지 접속 시 노출할 YouTube 영상 URL을 관리합니다.</p>
+        <p className="eyebrow">INTERVIEW VIDEO</p>
+        <h1>홈 인터뷰 영상 관리</h1>
+        <p>홈페이지 본문에 표시할 YouTube 영상 URL을 관리합니다.</p>
         <StatusMessage message={params.message} />
       </div>
 
@@ -35,7 +35,7 @@ export default async function PopupAdminPage({ searchParams }: PopupAdminPagePro
         </label>
         <label className="check-row">
           <input name="enabled" type="checkbox" defaultChecked={setting?.enabled ?? true} />
-          홈 접속 시 영상 팝업 노출
+          홈 본문에 인터뷰 영상 표시
         </label>
         <div className="actions">
           <button className="button" type="submit">

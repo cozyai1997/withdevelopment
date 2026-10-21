@@ -35,10 +35,10 @@ export async function updatePopupVideoSettings(formData: FormData) {
   );
 
   if (error) {
-    redirectWithMessage("영상 팝업 설정을 저장하지 못했습니다.");
+    redirectWithMessage("인터뷰 영상 설정을 저장하지 못했습니다.");
   }
 
   revalidatePath("/");
   revalidatePath("/admin/popup");
-  redirectWithMessage("영상 팝업 설정을 저장했습니다.");
+  redirectWithMessage("인터뷰 영상 설정을 저장했습니다.");
 }
